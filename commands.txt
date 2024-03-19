@@ -1,0 +1,1 @@
+wsk action create function2 function2.js
