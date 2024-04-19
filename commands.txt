@@ -1,1 +1,7 @@
 wsk action create function2 function2.js
+
+
+// const routeMappings = {
+//     '/api/function1': '/guest/function1',
+//     '/api/function2': '/guest/function2',
+// }
