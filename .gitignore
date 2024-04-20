@@ -1,1 +1,2 @@
-/node_modules
+/cache-service/node_modules
+/test-invocation/node_modules

@@ -5,3 +5,5 @@ wsk action create function2 function2.js
 //     '/api/function1': '/guest/function1',
 //     '/api/function2': '/guest/function2',
 // }
+
+docker build -t openwhisk-proxy .

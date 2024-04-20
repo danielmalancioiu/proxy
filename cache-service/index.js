@@ -26,6 +26,7 @@ app.use(async (req, res) => {
     const cacheKey = `${path}?${JSON.stringify(query)}`
     const targetFunction = routeMappings[path]
     const ttl = await calculateDynamicTTL(path)
+    //const ttl = 300
 
     if (targetFunction) {
         const cachedResult = await redisClient.get(cacheKey)

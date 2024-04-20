@@ -1,0 +1,37 @@
+services:
+  redis-server:
+    image: redis:7.2-alpine
+    container_name: redis-server
+    networks:
+      - proxy-network
+    ports:
+      - "6379:6379"
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - cache-service
+    networks:
+      - proxy-network
+
+  cache-service:
+    image: openwhisk-proxy
+    networks:
+      - proxy-network
+    ports:
+      - "3000:3000"
+    environment:
+      - OPENWHISK_API_HOST=http://host.docker.internal:3233
+      - REDIS_HOST=redis-server
+      - REDIS_PORT=6379
+    depends_on:
+      - redis-server
+
+networks:
+  proxy-network:
+    driver: bridge
+    external: true
+    name: proxy-network
+

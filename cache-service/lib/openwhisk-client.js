@@ -3,7 +3,7 @@ const openwhisk = require('openwhisk')
 const ow = openwhisk({
     api_key:
         '23bc46b1-71f6-4ed5-8c54-816aa4f8c502:123zO3xZCLrMN6v2BKK1dXYFpXlPkccOFqm12CdAsMgRU4VrNZ9lyGVCGuMDGIwP',
-    apihost: 'http://localhost:3233',
+    apihost: process.env.OPENWHISK_API_HOST || 'http://localhost:3233',
 })
 
 async function fetchOpenWhiskFunctions() {
