@@ -1,3 +1,4 @@
+
 const express = require('express')
 const { createRedisClient } = require('./lib/redis-client')
 const {
@@ -15,8 +16,25 @@ const {
 } = require('./lib/trackers/dataChangeTracker')
 const { calculateDynamicTTL, resetTTLIfNeeded } = require('./lib/ttlCalculator')
 
+const cors = require('cors');
+
+
+
 const app = express()
 const redisClient = createRedisClient()
+
+// Enable CORS for all routes
+app.use(cors());
+
+app.get('/api/functions', (req, res) => {
+    // Assuming routeMappings keys are in the form "/api/functionName"
+    const functionNames = Object.keys(routeMappings).map((path) => {
+        // Extract the function name part from the path
+        return path.split('/').pop();  // This splits the path and returns the last element
+    });
+    res.json(functionNames);
+});
+
 
 app.use(async (req, res) => {
     const { path, query } = req
@@ -48,6 +66,9 @@ app.use(async (req, res) => {
         res.status(404).send('Not Found')
     }
 })
+
+
+
 
 const port = 3000
 app.listen(port, () => {

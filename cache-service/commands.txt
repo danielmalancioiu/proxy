@@ -6,4 +6,3 @@ docker build -t openwhisk-proxy .
 //     '/api/function2': '/guest/function2',
 // }
 
-docker build -t openwhisk-proxy .

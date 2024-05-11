@@ -22,6 +22,16 @@ services:
     depends_on:
       - redis-server
 
+  ui:
+    build: ./ui
+    container_name: ui-service
+    networks:
+      - proxy-network
+    ports:
+      - "8080:80"
+    depends_on:
+      - cache-service
+
 networks:
   proxy-network:
     driver: bridge

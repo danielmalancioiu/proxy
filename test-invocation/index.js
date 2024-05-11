@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const openwhisk = require('openwhisk');
 
+const cors = require('cors');
 const app = express();
 const port = 3001;
 

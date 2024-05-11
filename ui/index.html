@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>OpenWhisk Function Invoker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <h1>OpenWhisk Function Invoker</h1>
+    <div>
+        <label for="functionSelect">Choose a function:</label>
+        <select id="functionSelect"></select>
+    </div>
+    <div>
+        <label for="functionParams">Parameters (JSON):</label>
+        <textarea id="functionParams" rows="4" cols="50" placeholder='{"key": "value"}'></textarea>
+    </div>
+    <button onclick="invokeFunction()">Invoke Function</button>
+    <div id="result"></div>
+    <script src="app.js"></script>
+</body>
+</html>
