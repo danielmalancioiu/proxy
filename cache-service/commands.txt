@@ -1,5 +1,5 @@
 wsk action create function2 function2.js
-
+docker build -t openwhisk-proxy .
 
 // const routeMappings = {
 //     '/api/function1': '/guest/function1',
