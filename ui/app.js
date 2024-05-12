@@ -33,7 +33,7 @@
 //         document.getElementById('result').innerText = `Error: ${error.toString()}`;
 //     });
 // }
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {  // Wait for the DOM to load         
     fetch('http://host.docker.internal:3000/api/functions')
         .then(response => response.json())
         .then(functionNames => {
@@ -92,12 +92,23 @@ function invokeFunction() {
     .then(data => {
         const endTime = performance.now();  // End timing after response
         const timeTaken = endTime - startTime;
-        document.getElementById('result').innerText = `Result: ${JSON.stringify(data, null, 2)}`;
+        document.getElementById('result').innerText = `Result: ${JSON.stringify(data.result, null, 2)}`;
         document.getElementById('timeTaken').innerText = `Time Taken: ${timeTaken.toFixed(2)} ms`;
+        const cacheIndicator = document.getElementById('cacheStatus');
+        if (data.cacheHit) {
+            cacheIndicator.style.backgroundColor = 'green'; // Green for cache hit
+            cacheIndicator.style.color = 'white'; // White text for better visibility
+            cacheIndicator.innerText = 'Cache Hit';
+        } else {
+            cacheIndicator.style.backgroundColor = 'red'; // Red for cache miss
+            cacheIndicator.style.color = 'white';
+            cacheIndicator.innerText = 'Cache Miss';
+        }
     })
     .catch(error => {
         document.getElementById('result').innerText = `Error: ${error.toString()}`;
-        document.getElementById('timeTaken').innerText = ''; // Clear time on error
+        document.getElementById('timeTaken').innerText = ''; 
+        document.getElementById('cacheStatus').style.backgroundColor = '';
     });
 }
 

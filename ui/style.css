@@ -47,6 +47,14 @@ h1 {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
+.add-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #007bff;
+    font-size: 24px;
+}
+
 .btn {
     background-color: #007bff;
     color: white;
@@ -94,7 +102,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-.result, .time-taken {
+.result, .time-taken, .cache-status {
     margin-top: 15px;
     padding: 10px;
     background-color: #e9ecef;
@@ -112,6 +120,10 @@ h1 {
 }
 
 .toggle-theme:hover {
+    color: #ebebeb;
+}
+
+body.dark-theme .toggle-theme:hover {
     color: #ebebeb;
 }
 
@@ -137,3 +149,4 @@ body.dark-theme .btn {
 body.dark-theme .btn:hover {
     background-color: #013d7d;
 }
+

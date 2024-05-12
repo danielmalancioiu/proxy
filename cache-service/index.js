@@ -50,7 +50,7 @@ app.use(async (req, res) => {
         const cachedResult = await redisClient.get(cacheKey)
         if (cachedResult) {
             await resetTTLIfNeeded(cacheKey, ttl, path)
-            res.send(JSON.parse(cachedResult))
+            res.json({result: JSON.parse(cachedResult), cacheHit: true})
         } else {
             const result = await ow.actions.invoke({
                 name: targetFunction,
@@ -60,7 +60,7 @@ app.use(async (req, res) => {
             })
 
             await redisClient.setEx(cacheKey, ttl, JSON.stringify(result))
-            res.send(result)
+            res.json({result: result, cacheHit: false})
         }
     } else {
         res.status(404).send('Not Found')
