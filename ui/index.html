@@ -1,25 +1,4 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>OpenWhisk Function Invoker</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <h1>OpenWhisk Function Invoker</h1>
-    <div>
-        <label for="functionSelect">Choose a function:</label>
-        <select id="functionSelect"></select>
-    </div>
-    <div>
-        <label for="functionParams">Parameters (JSON):</label>
-        <textarea id="functionParams" rows="4" cols="50" placeholder='{"key": "value"}'></textarea>
-    </div>
-    <button onclick="invokeFunction()">Invoke Function</button>
-    <div id="result"></div>
-    <script src="app.js"></script>
-</body>
-</html> -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -34,6 +13,7 @@
         <div class="header">
             <h1>OpenWhisk Function Invoker</h1>
             <button class="toggle-theme" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+            <button class="settings-btn" onclick="openSettings()"><i class="fas fa-cog"></i></button>
         </div>
         <div class="form-group">
             <label for="functionSelect">Choose a function:</label>
@@ -46,6 +26,24 @@
         <div id="timeTaken" class="time-taken"></div>
         <div id="cacheStatus" class="cache-status"></div>
     </div>
+
+<!-- Modal for settings -->
+<div id="settingsModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeSettings()">&times;</span>
+        <h2>Function Settings</h2>
+        <div class="form-group">
+            <label for="ttlInput">TTL (seconds):</label>
+            <input type="number" id="ttlInput" min="1">
+        </div>
+        <div class="form-group">
+            <label for="cacheableInput">Cacheable:</label>
+            <input type="checkbox" id="cacheableInput">
+        </div>
+        <button class="btn save-btn" onclick="saveConfiguration()">Save Configuration</button>
+    </div>
+</div>
+
     <script src="app.js"></script>
 </body>
 </html>

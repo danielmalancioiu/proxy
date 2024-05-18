@@ -69,7 +69,6 @@ function removeParameter(element) {
     element.parentElement.remove();
 }
 
-
 function invokeFunction() {
     const functionName = document.getElementById('functionSelect').value;
     const paramNames = document.querySelectorAll('.param-name');
@@ -116,5 +115,58 @@ function toggleTheme() {
     document.body.classList.toggle('dark-theme');
 }
 
+function openSettings() {
+    const selectedFunction = document.getElementById('functionSelect').value;
 
+    fetch(`http://host.docker.internal:3000/api/settings?path=/api/${selectedFunction}`)
+        .then(response => response.json())
+        .then(settings => {
+            document.getElementById('ttlInput').value = settings.ttl;
+            document.getElementById('cacheableInput').checked = settings.cacheable;
+            document.getElementById('settingsModal').style.display = 'block';
+        })
+        .catch(error => {
+            console.error('Error fetching settings:', error);
+            alert('Failed to load settings.');
+        });
+}
+function closeSettings() {
+    document.getElementById('settingsModal').style.display = 'none';
+}
 
+function saveConfiguration() {
+    const selectedFunction = document.getElementById('functionSelect').value;
+    const ttl = parseInt(document.getElementById('ttlInput').value, 10);
+    const cacheable = document.getElementById('cacheableInput').checked;
+
+    if (!selectedFunction || isNaN(ttl)) {
+        alert('Please provide valid TTL and select a function.');
+        return;
+    }
+
+    const config = {
+        path: `/api/${selectedFunction}`,
+        ttl,
+        cacheable
+    };
+
+    fetch('http://host.docker.internal:3000/api/register', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(config)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Configuration saved successfully!');
+            closeSettings();
+        } else {
+            alert('Failed to save configuration.');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred while saving configuration.');
+    });
+}

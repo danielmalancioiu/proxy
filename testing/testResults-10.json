@@ -1,0 +1,106 @@
+{
+  "openwhisk": [
+    {
+      "now": "2024-05-12T15:51:02.199Z",
+      "timeTaken": 208,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:51:17.464Z",
+      "timeTaken": 149,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:51:32.654Z",
+      "timeTaken": 155,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:51:47.815Z",
+      "timeTaken": 136,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:52:02.975Z",
+      "timeTaken": 126,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:52:18.137Z",
+      "timeTaken": 134,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:52:33.299Z",
+      "timeTaken": 136,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:52:48.445Z",
+      "timeTaken": 121,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:53:03.605Z",
+      "timeTaken": 128,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-12T15:53:18.766Z",
+      "timeTaken": 135,
+      "isColdStart": true
+    }
+  ],
+  "cacheService": [
+    {
+      "now": "2024-05-12T15:51:02.309Z",
+      "timeTaken": 109,
+      "cacheHit": false
+    },
+    {
+      "now": "2024-05-12T15:51:17.495Z",
+      "timeTaken": 30,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:51:32.672Z",
+      "timeTaken": 17,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:51:47.833Z",
+      "timeTaken": 18,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:52:02.993Z",
+      "timeTaken": 18,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:52:18.156Z",
+      "timeTaken": 18,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:52:33.315Z",
+      "timeTaken": 16,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:52:48.463Z",
+      "timeTaken": 17,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:53:03.628Z",
+      "timeTaken": 22,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-12T15:53:18.783Z",
+      "timeTaken": 16,
+      "cacheHit": true
+    }
+  ]
+}

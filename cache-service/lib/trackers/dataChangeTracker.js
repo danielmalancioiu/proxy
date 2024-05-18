@@ -1,29 +1,30 @@
-const { createRedisClient } = require('../redis-client')
-const client = createRedisClient()
-
-client.on('error', (err) => console.error('Redis Client Error', err))
+const { createRedisClient } = require('../redis-client');
+const redisClient = createRedisClient();
 
 async function logDataChange(path) {
-    const key = `data_change:${path}`
-    const currentTime = Math.floor(Date.now() / 1000) // Current time in seconds
-    await client.lPush(key, currentTime) // Push current time to list
-    await client.lTrim(key, 0, 23) // Keep only last 24 entries
+    const timestamp = Date.now();
+    const key = `dataChange:${path}`;
+    
+    // Add the timestamp to a sorted set with the timestamp as the score
+    await redisClient.zAdd(key, [{ score: timestamp, value: timestamp.toString() }]);
+    
+    // Optionally, remove old entries to keep the dataset manageable
+    const oneDayAgo = timestamp - 24 * 60 * 60 * 1000; // 24 hours ago
+    await redisClient.zRemRangeByScore(key, 0, oneDayAgo);
 }
 
 async function getDataChangeRate(path) {
-    const key = `data_change:${path}`
-    const timestamps = await client.lRange(key, 0, -1) // Get all timestamps
+    const key = `dataChange:${path}`;
+    const oneHourAgo = Date.now() - 60 * 60 * 1000; // 1 hour ago
 
-    if (timestamps.length < 2) {
-        return 0 // Not enough data to calculate rate
-    }
-
-    const timeDiffs = timestamps
-        .slice(1)
-        .map((time, index) => timestamps[index] - time)
-    const averageTimeDiff =
-        timeDiffs.reduce((a, b) => a + b, 0) / timeDiffs.length
-    return 1 / averageTimeDiff // Change rate per second
+    // Get the count of changes in the last hour
+    const changeCount = await redisClient.zCount(key, oneHourAgo, Date.now());
+    
+    // Calculate change rate (changes per minute)
+    const changeRate = changeCount / 60;
+    
+    return changeRate;
 }
+
 
 module.exports = { logDataChange, getDataChangeRate }

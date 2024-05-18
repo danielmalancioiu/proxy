@@ -8,23 +8,24 @@ const {
 const { ow } = require('./lib/openwhisk-client')
 const {
     increaseAccessCount,
-    getAccessFrequency,
+    getRecentAccessPattern,
 } = require('./lib/trackers/accessTracker')
 const {
     logDataChange,
     getDataChangeRate,
 } = require('./lib/trackers/dataChangeTracker')
-const { calculateDynamicTTL, resetTTLIfNeeded } = require('./lib/ttlCalculator')
-
 const cors = require('cors');
-
-
 
 const app = express()
 const redisClient = createRedisClient()
 
+
+app.use(express.json());
 // Enable CORS for all routes
 app.use(cors());
+
+// In-memory storage for function configurations
+const functionConfigs = {};
 
 app.get('/api/functions', (req, res) => {
     // Assuming routeMappings keys are in the form "/api/functionName"
@@ -35,6 +36,83 @@ app.get('/api/functions', (req, res) => {
     res.json(functionNames);
 });
 
+// Function to register a new function with custom cache and TTL settings
+app.post('/api/register', async (req, res) => {
+    const { path, ttl, cacheable } = req.body;
+
+    if (!path || typeof ttl !== 'number' || typeof cacheable !== 'boolean') {
+        return res.status(400).send('Invalid registration parameters');
+    }
+
+    await redisClient.hSet('functionConfigs', path, JSON.stringify({ ttl, cacheable }));
+    res.status(200).send('Function registered successfully');
+});
+
+// Function to retrieve settings for a given function
+app.get('/api/settings', async (req, res) => {
+    const { path } = req.query;
+
+    if (!path) {
+        return res.status(400).send('Path parameter is required');
+    }
+
+    const settings = await redisClient.hGet('functionConfigs', path);
+    if (settings) {
+        res.json(JSON.parse(settings));
+    } else {
+        res.json({ ttl: 300, cacheable: true }); // Default settings
+    }
+});
+
+async function fetchAndCacheData(path, query, cacheKey, ttl) {
+    const result = await ow.actions.invoke({
+        name: routeMappings[path],
+        blocking: true,
+        result: true,
+        params: query,
+    });
+
+    // Log data change when new data is fetched
+    await logDataChange(path);
+
+    // Cache the new result with a timestamp
+    const cachedData = {
+        timestamp: Date.now(),
+        data: result
+    };
+    await redisClient.setEx(cacheKey, ttl, JSON.stringify(cachedData));
+
+    return result;
+}
+
+async function calculateDynamicTTL(path, customTtl) {
+    let baseTTL = Number(customTtl) || 300; // Default TTL of 5 minutes
+    const accessPattern = await getRecentAccessPattern(path);
+    const frequency = accessPattern.length;
+    const changeRate = await getDataChangeRate(path);
+    const hour = new Date().getHours();
+
+    // Example: Increase TTL during peak hours (8 AM to 8 PM)
+    if (hour >= 8 && hour <= 20) {
+        baseTTL *= 2;
+    }
+
+    // Adjust TTL based on access frequency
+    if (frequency > 100) {
+        baseTTL *= 2; // Double TTL for high frequency access
+    } else if (frequency < 10) {
+        baseTTL /= 2; // Halve TTL for low frequency access
+    }
+
+    // Adjust TTL based on data change rate
+    if (changeRate > 0.1) {
+        baseTTL /= 2; // Halve TTL if data changes frequently
+    }
+
+    // Ensure TTL is within reasonable bounds
+    return Math.max(60, Math.min(baseTTL, 3600)); // TTL between 1 minute and 1 hour
+}
+
 
 app.use(async (req, res) => {
     const { path, query } = req
@@ -43,13 +121,19 @@ app.use(async (req, res) => {
 
     const cacheKey = `${path}?${JSON.stringify(query)}`
     const targetFunction = routeMappings[path]
-    const ttl = await calculateDynamicTTL(path)
-    //const ttl = 300
+    const settings = await redisClient.hGet('functionConfigs', path);
+    const customConfig = settings ? JSON.parse(settings) : { ttl: 300, cacheable: true };
+    const ttl = await calculateDynamicTTL(path, customConfig.ttl);
+
+    let cacheable = customConfig.cacheable;
+    if (typeof cacheable !== 'boolean') {
+        cacheable = customConfig.cacheable === 'true';
+    }
+    console.log(`Cacheable for ${path}:`, cacheable); // Debugging statement
 
     if (targetFunction) {
         const cachedResult = await redisClient.get(cacheKey)
         if (cachedResult) {
-            await resetTTLIfNeeded(cacheKey, ttl, path)
             res.json({result: JSON.parse(cachedResult), cacheHit: true})
         } else {
             const result = await ow.actions.invoke({
@@ -59,16 +143,15 @@ app.use(async (req, res) => {
                 params: query,
             })
 
-            await redisClient.setEx(cacheKey, ttl, JSON.stringify(result))
+            if (cacheable) {
+                await redisClient.setEx(cacheKey, ttl, JSON.stringify(result))
+            }
             res.json({result: result, cacheHit: false})
         }
     } else {
         res.status(404).send('Not Found')
     }
 })
-
-
-
 
 const port = 3000
 app.listen(port, () => {
