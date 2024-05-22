@@ -9,8 +9,8 @@ function createRedisClient() {
   //       host: process.env.REDIS_HOST,
   //       port: process.env.REDIS_PORT 
   //     });
+  
     const redisUrl = `redis://${process.env.REDIS_HOST}:${process.env.REDIS_PORT}`
-    console.log('redisUrl:', redisUrl)
     const client = redis.createClient({ url: redisUrl });
     client.on('error', (err) => console.error('Redis error', err))
     client.connect()

@@ -6,7 +6,7 @@ from datetime import datetime
 # Load and prepare the data
 def load_data():
     # Assuming 'testResults.json' is in the same directory as this script
-    df = pd.read_json('testResults-10.json')
+    df = pd.read_json('testResults-postsFunction-simple.json')
     
     # Convert data into separate DataFrames for OpenWhisk and Cache Service
     df_openwhisk = pd.DataFrame(df['openwhisk'].tolist())
@@ -44,7 +44,7 @@ def plot_data(df_openwhisk, df_cache):
 
     # Save and show the plot
     plt.tight_layout()
-    plt.savefig('response_times_comparison-10-elements.png')
+    plt.savefig('response_times_simple.png')
     plt.show()
 
 def main():

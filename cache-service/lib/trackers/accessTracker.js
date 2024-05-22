@@ -23,20 +23,22 @@ async function getRecentAccessPattern(path) {
     const key = `access_log:${path}`;
     const timestamps = await client.lRange(key, 0, -1);  // Retrieve all timestamps
 
-    if (timestamps.length === 0) {
-        return 'low';
-    }
-
-    const lastTimestamp = parseInt(timestamps[0]);
-    const lastDate = new Date(lastTimestamp);
-    const hours = lastDate.getHours();
-
-    // Determine pattern based on the time of the last access
-    if (hours >= 8 && hours <= 18) {
-        return 'day';
-    } else {
-        return 'night';
-    }
+    return timestamps.length;
 }
+//     if (timestamps.length === 0) {
+//         return 'low';
+//     }
+
+//     const lastTimestamp = parseInt(timestamps[0]);
+//     const lastDate = new Date(lastTimestamp);
+//     const hours = lastDate.getHours();
+
+//     // Determine pattern based on the time of the last access
+//     if (hours >= 8 && hours <= 18) {
+//         return 'day';
+//     } else {
+//         return 'night';
+//     }
+// }
 
 module.exports = { increaseAccessCount, getRecentAccessPattern };

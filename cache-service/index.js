@@ -87,10 +87,12 @@ async function fetchAndCacheData(path, query, cacheKey, ttl) {
 
 async function calculateDynamicTTL(path, customTtl) {
     let baseTTL = Number(customTtl) || 300; // Default TTL of 5 minutes
-    const accessPattern = await getRecentAccessPattern(path);
-    const frequency = accessPattern.length;
+    //const accessPattern = await getRecentAccessPattern(path);
+    const frequency = await getRecentAccessPattern(path);
     const changeRate = await getDataChangeRate(path);
     const hour = new Date().getHours();
+
+    console.log(frequency, changeRate, hour); // Debugging statement
 
     // Example: Increase TTL during peak hours (8 AM to 8 PM)
     if (hour >= 8 && hour <= 20) {
@@ -114,6 +116,7 @@ async function calculateDynamicTTL(path, customTtl) {
 }
 
 
+
 app.use(async (req, res) => {
     const { path, query } = req
     // Log each access to calculate frequency
@@ -134,6 +137,7 @@ app.use(async (req, res) => {
     if (targetFunction) {
         const cachedResult = await redisClient.get(cacheKey)
         if (cachedResult) {
+            await redisClient.expire(cacheKey, ttl); // Update TTL on cache hit
             res.json({result: JSON.parse(cachedResult), cacheHit: true})
         } else {
             const result = await ow.actions.invoke({
