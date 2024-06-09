@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 def plot_statistics(title):
-    with open('testResults-postsFunction-simple.json') as f:
+    with open('responseTimes-complex.json') as f:
         data = json.load(f)
 
     openwhisk_stats = data['statistics']['openWhiskStats']
@@ -27,8 +27,8 @@ def plot_statistics(title):
     width = 0.35
 
     plt.figure(figsize=(12, 6))
-    plt.bar(x - width/2, openwhisk_values, width, label='Plain OpenWhisk')
-    plt.bar(x + width/2, cache_service_values, width, label='Caching Service')
+    plt.bar(x - width/2, openwhisk_values, width, label='Plain OpenWhisk', color='#0b83a5')
+    plt.bar(x + width/2, cache_service_values, width, label='Caching Service', color='#f6c85f')
 
     plt.xlabel('Response Time Categories')
     plt.ylabel('Response Time (ms)')
@@ -37,12 +37,12 @@ def plot_statistics(title):
     plt.legend()
 
     plt.tight_layout()
-    plt.savefig('response_times_simple_statistics.png')
+    plt.savefig('responseTimes_complex_statistics.png')
     plt.show()
 
 
 def main():
-    plot_statistics('Response Time Statistics for Simple Function')
+    plot_statistics('Response Time Statistics for Complex Function')
 
 if __name__ == '__main__':
     main()

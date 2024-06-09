@@ -1,0 +1,120 @@
+{
+  "openwhisk": [
+    {
+      "now": "2024-05-25T13:31:14.730Z",
+      "timeTaken": 169,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:31:25.885Z",
+      "timeTaken": 140,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:31:37.019Z",
+      "timeTaken": 119,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:31:48.157Z",
+      "timeTaken": 126,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:31:59.279Z",
+      "timeTaken": 117,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:32:10.406Z",
+      "timeTaken": 125,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:32:21.537Z",
+      "timeTaken": 124,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:32:32.674Z",
+      "timeTaken": 125,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:32:43.787Z",
+      "timeTaken": 110,
+      "isColdStart": true
+    },
+    {
+      "now": "2024-05-25T13:32:54.916Z",
+      "timeTaken": 125,
+      "isColdStart": true
+    }
+  ],
+  "cacheService": [
+    {
+      "now": "2024-05-25T13:33:06.088Z",
+      "timeTaken": 161,
+      "cacheHit": false
+    },
+    {
+      "now": "2024-05-25T13:33:06.096Z",
+      "timeTaken": 8,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.104Z",
+      "timeTaken": 8,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.112Z",
+      "timeTaken": 8,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.121Z",
+      "timeTaken": 8,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.136Z",
+      "timeTaken": 14,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.157Z",
+      "timeTaken": 21,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.169Z",
+      "timeTaken": 12,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.182Z",
+      "timeTaken": 12,
+      "cacheHit": true
+    },
+    {
+      "now": "2024-05-25T13:33:06.190Z",
+      "timeTaken": 7,
+      "cacheHit": true
+    }
+  ],
+  "statistics": {
+    "openWhiskStats": {
+      "median": 125,
+      "percentile90": 169,
+      "percentile95": 169,
+      "percentile99": 169
+    },
+    "cacheServiceStats": {
+      "median": 12,
+      "percentile90": 151,
+      "percentile95": 151,
+      "percentile99": 151
+    }
+  }
+}

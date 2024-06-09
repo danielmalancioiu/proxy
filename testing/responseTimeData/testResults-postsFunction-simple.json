@@ -54,7 +54,7 @@
   "cacheService": [
     {
       "now": "2024-05-21T08:25:46.364Z",
-      "timeTaken": 154,
+      "timeTaken": 146,
       "cacheHit": false
     },
     {
@@ -102,19 +102,5 @@
       "timeTaken": 12,
       "cacheHit": true
     }
-  ],
-  "statistics": {
-    "openWhiskStats": {
-      "median": 118,
-      "percentile90": 151,
-      "percentile95": 151,
-      "percentile99": 151
-    },
-    "cacheServiceStats": {
-      "median": 13,
-      "percentile90": 154,
-      "percentile95": 154,
-      "percentile99": 154
-    }
-  }
+  ]
 }

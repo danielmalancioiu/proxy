@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Number of invocations
-NUM_INVOCATIONS=100
+NUM_INVOCATIONS=20
 
 # OpenWhisk action name
 ACTION_NAME="fib"
@@ -22,10 +22,10 @@ fi
 # Loop to invoke the action
 for i in $(seq 1 $NUM_INVOCATIONS)
 do
-   RANDOM_NUMBER=$i
+   RANDOM_NUMBER=50
    echo "Invoking action $ACTION_NAME - Attempt $i"
    $WSK_CLI action invoke $ACTION_NAME --param n $RANDOM_NUMBER --result --blocking
-   sleep 0.1  # Adjust the sleep time as necessary
+   sleep 11  # Adjust the sleep time as necessary
 done
 
 echo "Completed $NUM_INVOCATIONS invocations of action $ACTION_NAME."

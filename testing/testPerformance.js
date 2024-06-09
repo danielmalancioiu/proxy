@@ -11,7 +11,7 @@ async function invokeOpenWhisk(userId) {
     const startTime = Date.now();
     try {
         const result = await ow.actions.invoke({
-            actionName: 'user-profile',
+            actionName: 'posts',
             params: { userId },
             blocking: true,
             result: true
@@ -31,7 +31,7 @@ async function invokeOpenWhisk(userId) {
 
 async function invokeCacheService(userId) {
     const startTime = Date.now();
-    const response = await axios.post('http://localhost:3000/api/user-profile', {userId} );
+    const response = await axios.post('http://localhost:3000/api/posts', {userId} );
     const endTime = Date.now();
     const timeTaken = endTime - startTime;
     const now = new Date();
@@ -56,15 +56,14 @@ async function runTest(userId, iterations, delayBetweenCalls) {
     for (let i = 0; i < iterations; i++) {
         console.log(`Iteration ${i + 1} - OpenWhisk`);
         results.openwhisk.push(await invokeOpenWhisk(userId));
+        await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
+    }
 
-        if (i === 0) {
-            await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
-        }
-
+    for (let i = 0; i < iterations; i++) {
         console.log(`Iteration ${i + 1} - Cache Service`);
         results.cacheService.push(await invokeCacheService(userId));
 
-        await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
+        // await new Promise(resolve => setTimeout(resolve, delayBetweenCalls));
     }
 
     const openWhiskTimes = results.openwhisk.map(r => r.timeTaken).filter(t => t !== null);
@@ -76,8 +75,8 @@ async function runTest(userId, iterations, delayBetweenCalls) {
     results.statistics = { openWhiskStats, cacheServiceStats };
 
     // Write results to a file
-    fs.writeFileSync('testResults-postsFunction-simple.json', JSON.stringify(results, null, 2));
+    fs.writeFileSync('responseTimes-complex.json', JSON.stringify(results, null, 2));
 }
 
 // Example usage: Test with 10 iterations and a 15-second delay
-runTest('user1', 10, 15000);
+runTest('user1', 10, 11000);
